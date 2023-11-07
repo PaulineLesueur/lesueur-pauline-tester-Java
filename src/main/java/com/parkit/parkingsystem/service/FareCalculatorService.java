@@ -17,9 +17,6 @@ public class FareCalculatorService {
 
         double duration = (outHour - inHour) / (1000 * 60 * 60);
 
-        if (duration < Fare.FREE_PARKING) {
-            duration = 0;
-        }
         duration = freeParking(duration);
 
         switch (ticket.getParkingSpot().getParkingType()){
