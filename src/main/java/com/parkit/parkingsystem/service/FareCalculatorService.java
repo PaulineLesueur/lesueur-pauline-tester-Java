@@ -3,8 +3,6 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.model.Ticket;
 
-import static com.parkit.parkingsystem.constants.Fare.DISCOUNT;
-
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket, Boolean discount){
@@ -23,14 +21,14 @@ public class FareCalculatorService {
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                 if(discount) {
-                    ticket.setPrice(ticket.getPrice() * DISCOUNT);
+                    ticket.setPrice(ticket.getPrice() * Fare.DISCOUNT);
                 }
                 break;
             }
             case BIKE: {
                 ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                 if(discount) {
-                    ticket.setPrice(ticket.getPrice() * DISCOUNT);
+                    ticket.setPrice(ticket.getPrice() * Fare.DISCOUNT);
                 }
                 break;
             }
