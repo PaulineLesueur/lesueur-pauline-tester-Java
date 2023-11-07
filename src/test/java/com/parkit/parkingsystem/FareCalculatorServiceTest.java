@@ -9,6 +9,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.parkit.parkingsystem.constants.Fare.DISCOUNT;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Date;
@@ -152,4 +153,33 @@ public class FareCalculatorServiceTest {
         assertEquals( 0 , ticket.getPrice());
     }
 
+    @Test
+    public void calculateFareCarWithDiscount() {
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 45 * 60 * 1000 ) ); //45 minutes parking time
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        Boolean discount = true;
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket, discount);
+        assertEquals( (0.75 * Fare.CAR_RATE_PER_HOUR) * DISCOUNT, ticket.getPrice() );
+    }
+
+    @Test
+    public void calculateFareBikeWithDiscount() {
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 45 * 60 * 1000 ) ); //45 minutes parking time
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        Boolean discount = true;
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket, discount);
+        assertEquals( (0.75 * Fare.BIKE_RATE_PER_HOUR) * DISCOUNT, ticket.getPrice() );
+    }
 }
