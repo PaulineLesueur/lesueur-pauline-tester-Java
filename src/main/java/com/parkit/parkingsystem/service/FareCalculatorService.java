@@ -15,6 +15,11 @@ public class FareCalculatorService {
 
         double duration = (outHour - inHour) / (1000 * 60 * 60);
 
+        if (duration < Fare.FREE_PARKING) {
+            duration = 0;
+        }
+        //freeParking(duration);
+
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
@@ -27,4 +32,11 @@ public class FareCalculatorService {
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
     }
+
+    /*public double freeParking(double duration) {
+        if (duration < Fare.FREE_PARKING) {
+            duration = 0;
+        }
+        return duration;
+    }*/
 }
