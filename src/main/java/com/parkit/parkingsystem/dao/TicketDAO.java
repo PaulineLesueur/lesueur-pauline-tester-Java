@@ -49,6 +49,7 @@ public class TicketDAO {
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
+            rs.getInt(1);
             if(rs.next()){
                 ticket = new Ticket();
                 ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
@@ -85,5 +86,30 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+    public Integer getNbTicket(String vehicleRegNumber) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        int nbTicket = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+
+            ps = con.prepareStatement(DBConstants.COUNT_ID);
+            ps.setString(1, vehicleRegNumber);
+            rs = ps.executeQuery();
+            rs.next();
+            nbTicket = rs.getInt(1);
+
+        } catch (Exception ex) {
+            logger.error("Error counting recurrent id for vehicle", ex);
+        } finally {
+            dataBaseConfig.closeConnection(con);
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }
+
+        return nbTicket;
     }
 }
