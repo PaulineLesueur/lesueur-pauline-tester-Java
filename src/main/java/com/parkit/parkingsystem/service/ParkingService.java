@@ -47,7 +47,7 @@ public class ParkingService {
                 ticketDAO.saveTicket(ticket);
 
                 Integer nbTicket = ticketDAO.getNbTicket(vehicleRegNumber);
-                if(nbTicket > 0) {
+                if(nbTicket > 1) {
                     System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");
                 }
 
@@ -111,8 +111,9 @@ public class ParkingService {
             ticket.setOutTime(outTime);
 
             Integer nbTicket = ticketDAO.getNbTicket(vehicleRegNumber);
-            if(nbTicket > 0) {
+            if(nbTicket > 1) {
                 fareCalculatorService.calculateFare(ticket, true);
+                System.out.println("Vous avez reçu 5% de réduction !");
             } else {
                 fareCalculatorService.calculateFare(ticket);
             }
