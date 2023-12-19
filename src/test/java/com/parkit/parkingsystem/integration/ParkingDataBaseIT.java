@@ -16,8 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
+import static com.parkit.parkingsystem.constants.Fare.DISCOUNT;
 import static junit.framework.Assert.*;
 import static org.mockito.Mockito.when;
 
@@ -72,9 +76,24 @@ public class ParkingDataBaseIT {
         TimeUnit.SECONDS.sleep(5);
         parkingService.processExitingVehicle();
         //check that the fare generated and out time are populated correctly in the database
-        Ticket ticket =ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+        Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
         assertTrue(ticket.getOutTime().after(ticket.getInTime()));
         assertEquals(ticket.getPrice(), 0.0);
     }
 
+    @Test
+    public void testParkingLotExitRecurringUser() throws Exception {
+        testParkingLotExit();
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processIncomingVehicle();
+
+        Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+        Calendar calendar = new GregorianCalendar();
+        calendar.add(Calendar.HOUR, -1);
+        Date inTime = calendar.getTime();
+        ticket.setInTime(inTime);
+        ticketDAO.updateInTimeTicket(ticket);
+        parkingService.processExitingVehicle();
+        assertEquals(0.95, ticket.getPrice());
+    }
 }
