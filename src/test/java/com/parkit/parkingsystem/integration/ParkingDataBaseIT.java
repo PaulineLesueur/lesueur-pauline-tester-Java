@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
+import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -88,12 +89,10 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
 
         Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-        Calendar calendar = new GregorianCalendar();
-        calendar.add(Calendar.HOUR, -1);
-        Date inTime = calendar.getTime();
-        ticket.setInTime(inTime);
+        ticket.setInTime(new Date(System.currentTimeMillis() - 60 * 60 * 1000));
         ticketDAO.updateInTimeTicket(ticket);
         parkingService.processExitingVehicle();
-        assertEquals(0.95, ticket.getPrice());
+        ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
+        assertEquals(ticket.getPrice(), Fare.CAR_RATE_PER_HOUR * DISCOUNT);
     }
 }

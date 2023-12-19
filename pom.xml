@@ -80,9 +80,9 @@
                                     </mainClass>
                                 </manifest>
                             </archive>
-                            <descriptorRefs>
-                                <descriptorRef>executable-jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
+                            <descriptors>
+                                <descriptor>src/main/assembly/descriptors.xml</descriptor>
+                            </descriptors>
                         </configuration>
                     </execution>
                 </executions>
