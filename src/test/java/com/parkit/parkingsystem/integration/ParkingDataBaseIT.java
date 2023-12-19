@@ -17,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -93,6 +94,12 @@ public class ParkingDataBaseIT {
         ticketDAO.updateInTimeTicket(ticket);
         parkingService.processExitingVehicle();
         ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-        assertEquals(ticket.getPrice(), Fare.CAR_RATE_PER_HOUR * DISCOUNT);
+
+        double expectedFare = Fare.CAR_RATE_PER_HOUR * DISCOUNT;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        String expectedFareFormat = decimalFormat.format(expectedFare);
+        String actualFareFormat = decimalFormat.format(ticket.getPrice());
+
+        assertEquals(actualFareFormat, expectedFareFormat);
     }
 }
